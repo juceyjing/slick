@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="css/test.css"/>
+    <script src="js/crel.js"></script>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            text-decoration: none;
+        }
+        body{
+            padding: 20px;
+        }
+
+        #container{
+            width: 400px;
+            height: 300px;
+            position: relative;
+            border: 3px solid deeppink;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+
+        }
+        #list{
+            position: absolute;
+            z-index: 1;
+            width: 4000px;
+            height:300px;
+
+
+        }
+        #list img{
+            width: 400px;
+            height: 300px;
+            float: left;
+        }
+        #bottons{
+            position: absolute;
+            height: 10px;
+            width: 100px;
+            z-index: 2;
+           top:260px;
+            left: 170px;
+        }
+        #bottons .on{
+            background: orangered;
+        }
+        #bottons span{
+            cursor: pointer;
+            float: left;
+            border: 1px solid #fff;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #333;
+            margin-right: 5px;
+
+        }
+
+        .arrow{
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            position: absolute;
+            top: 60px;
+            line-height: 40px;
+            display: none;
+            z-index: 3;
+           background-color: rgba(0,0,0,0.3);
+        }
+        .arrow:hover{
+            display: block;
+            background-color: rgba(0,0,0,0.7);
+            color: #fff;
+
+        }
+        
+        #container:hover a{
+            display: block;
+
+        }
+        #prev{
+            left: 30px;
+            top:  140px;
+        }
+        #next{
+            right: 30px;
+            top: 140px;
+
+        }
+    </style>
+</head>
+<body>
+<div id ="container">
+    <!--轮播图片-->
+    <div id="list" style="left: -400px;">
+        <img src="img/4.jpg" alt=""/>
+        <img src="img/1.jpg" alt=""/>
+        <img src="img/2.jpg" alt=""/>
+        <img src="img/3.jpg" alt=""/>
+        <img src="img/4.jpg" alt=""/>
+        <img src="img/1.jpg" alt=""/>
+    </div>
+    <!--动态的小圆圈-->
+    <div id="bottons">
+        <span index="1" class="on"></span>
+        <span index="2"></span>
+        <span index="3"></span>
+        <span index="4"></span>
+    </div>
+    <a href="#" class="arrow" id="prev"><</a>
+    <a href="#" class="arrow" id="next">></a>
+</div>
+
+<script>
+//原生
+    window.onload=function(){
+        var container=document.getElementById("container")
+        var list=document.getElementById("list");
+        var  buttons=document.getElementById("bottons")
+                        .getElementsByTagName("span");
+        var prev=document.getElementById("prev");
+        var next=document.getElementById("next");
+        var index=1;
+        //根据index值来确定两那个点
+
+        function showButton(){
+            for(var i=0;i<buttons.length;i++){
+                if(buttons[i].className=="on"){
+                    buttons[i].className="";
+                break; 
+                }
+            }
+            buttons[index-1].className="on";
+
+        }
+function animate(offset){
+    var newLeft=parseInt(list.style.left)+offset;
+             list.style.left=newLeft+'px';
+             if(newLeft>-400){
+                  list.style.left=-1600+'px';
+             }
+             if(newLeft<-1600){
+                   list.style.left=-400+'px';
+
+             }
+
+     }
+    //小于-1600 大于-400
+        next.onclick=function(){
+            if(index==4){
+                index=1;
+            }else{
+                index+=1; 
+            }
+          
+           showButton();
+           animate(-400);
+
+        }
+        prev.onclick=function(){
+            if(index==1){
+                index=4;
+            }else{
+                index-=1;
+            }
+            
+           showButton();
+            animate(400); 
+        }
+        for(var i=0;i<buttons.length;i++){
+            buttons[i].onclick=function(){
+                //不在执行
+                if(this.className=="on"){
+                    return;
+                }
+                var myIndex=parseInt(this.getAttribute("index"));
+               var offset=-400*(myIndex-index); 
+               animate(offset);
+               index=myIndex;
+               showButton();
+            }
+        }
+
+
+
+    }
+
+
+</script>
+
+
+
+</body>
+</html>
